@@ -22,7 +22,7 @@
 </template>
 
 <script>
-    import {mapMutations, mapActions} from 'vuex'
+    import {mapActions, mapMutations, mapState} from 'vuex'
 
     export default {
         name: "LoginForm",
@@ -33,19 +33,29 @@
                 pwd: ''
             }
         },
+        computed: {
+            ...mapState(['beforeUrl'])
+        },
         methods: {
-            ...mapMutations(['SHOW_SIGN_UP_MODAL', 'SET_USER', 'SET_IS_AUTHENTICATED']),
-            ...mapActions(['SIGN_IN']),
+            ...mapMutations(['SHOW_SIGN_UP_MODAL', 'SET_USER', 'SET_IS_AUTHENTICATED', 'CLEAR_BEFORE_URL']),
+            ...mapActions(['SIGN_IN', 'GET_USER']),
             signUp() {
                 this.SHOW_SIGN_UP_MODAL()
             },
             signIn() {
                 const email = this.email;
                 const pwd = this.pwd;
-                this.SIGN_IN({ email, pwd })
+                this.SIGN_IN({email, pwd})
+                    .then(_ => {
+                        this.$router.replace(this.beforeUrl || '/')
+                        this.CLEAR_BEFORE_URL()
+                        return this.GET_USER();
+                    })
+                    .then(user => {
+                        console.log(user.uid)
+                    })
             }
         },
-
 
     }
 </script>

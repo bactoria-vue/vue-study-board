@@ -12,13 +12,17 @@
                     </router-link>
                 </v-list>
             </v-card>
+
+            <div align="center">
+                <v-btn color="primary" @click="addBoardModal">글쓰기</v-btn>
+            </div>
         </v-flex>
     </v-layout>
 </template>
 
 <script>
     import BoardListCard from "./BoardListCard";
-    import {mapActions, mapState} from "vuex";
+    import {mapActions, mapMutations, mapState} from "vuex";
 
     export default {
         name: "BoardList",
@@ -30,7 +34,11 @@
             this.GET_BOARDS()
         },
         methods: {
-            ...mapActions(['GET_BOARDS'])
+            ...mapActions(['GET_BOARDS']),
+            ...mapMutations(['SHOW_ADD_BOARD_MODAL']),
+            addBoardModal() {
+                this.SHOW_ADD_BOARD_MODAL();
+            }
         }
     }
 </script>

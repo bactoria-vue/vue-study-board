@@ -54,14 +54,14 @@
                         console.error("Error adding document: ", error);
                     });
             },
+            closeModal() {
+                this.clear();
+                this.CLOSE_ADD_BOARD_MODAL();
+            },
             clear() {
                 this.title = '';
                 this.content = '';
             },
-            closeModal() {
-                this.clear();
-                this.CLOSE_ADD_BOARD_MODAL();
-            }
         }
     }
 </script>

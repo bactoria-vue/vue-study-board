@@ -9,9 +9,13 @@ import store from '../store'
 Vue.use(Router)
 
 const requireAuth = () => (from, to, next) => {
-    !!store.state.token ?
-        next() :
-        next(`/login?returnPath=${encodeURIComponent(from.path)}`)
+    store.state.beforeUrl = encodeURIComponent(from.path)
+
+    store.dispatch('GET_USER').then(user =>
+        !!user ?
+            next() :
+            next(`/login`)
+    )
 }
 
 export default new Router({
@@ -30,12 +34,12 @@ export default new Router({
         {
             path: '/board/',
             component: BoardList,
-    //        beforeEnter: requireAuth()
+            //  beforeEnter: requireAuth()
         },
         {
             path: '/board/:id',
             component: Board,
-//            beforeEnter: requireAuth()
+            beforeEnter: requireAuth()
         }
     ]
 })

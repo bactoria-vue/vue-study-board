@@ -6,9 +6,6 @@
             </v-card-title>
             <v-card-text>
                 <v-text-field v-model="email" label="e-mail" required></v-text-field>
-                <v-text-field v-model="name" label="닉네임" required></v-text-field>
-
-
                 <v-text-field
                         v-model="pwd"
                         :type="'password'"

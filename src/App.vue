@@ -1,16 +1,6 @@
 <template>
     <v-app>
-        <v-toolbar app>
-            <v-toolbar-title class="headline text-uppercase">
-                <router-link to="/">Home</router-link>
-                <router-link to="/login" v-if="!isAuthenticated">Login</router-link>
-                <router-link to="/login" v-else>Logout</router-link>
-                <router-link to="/board">Board</router-link>
-                <span class="font-weight-light">가나다라</span>
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-        </v-toolbar>
-
+        <head-toolbar/>
         <v-content>
             <router-view/>
         </v-content>
@@ -18,12 +8,10 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
+    import HeadToolbar from "./components/HeadToolbar";
 
     export default {
         name: 'App',
-        computed: {
-            ...mapState(['isAuthenticated'])
-        }
+        components: {HeadToolbar},
     }
 </script>

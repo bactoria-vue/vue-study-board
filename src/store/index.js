@@ -10,7 +10,7 @@ export default new Vuex.Store({
         showAddBoardModal: false,
         showModifyBoardModal: false,
 
-        token: '',
+        beforeUrl: '',
 
         boards: [],
         board: '',
@@ -34,12 +34,11 @@ export default new Vuex.Store({
         CLOSE_MODIFY_BOARD_MODAL(state) {
             state.showModifyBoardModal = false;
         },
-        SET_USER(state, payload) {
-            state.user = payload;
+
+        CLEAR_BEFORE_URL(state) {
+            state.beforeUrl = ''
         },
-        SET_IS_AUTHENTICATED(state, payload) {
-            state.isAuthenticated = payload
-        },
+
         SET_BOARDS(state, payload) {
             state.boards = payload
         },
@@ -49,9 +48,7 @@ export default new Vuex.Store({
         CLEAR_BOARD(state) {
             state.board = ''
         },
-        SET_TOKEN(state) {
-            state.token = ''
-        }
+
     },
     actions: {
         SIGN_UP(_, {email, pwd}) {
@@ -64,30 +61,13 @@ export default new Vuex.Store({
                     console.log(error)
                 })
         },
-        SIGN_IN({commit}, {email, pwd}) {
-            firebase.auth().signInWithEmailAndPassword(email, pwd)
-                .then(user => {
-                    console.log(user)
-                });
-
-            firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
-                .then(token => {
-                    console.log(token)
-                    commit('SET_TOKEN', token)
-                })
-                .catch(function (error) {
-                    console.log(error)
-                })
-
-            firebase.auth().verifyIdToken(idToken)
-                .then(function(decodedToken) {
-                    var uid = decodedToken.uid;
-                    // ...
-                }).catch(function(error) {
-                // Handle error
-            });
+        SIGN_IN(_, {email, pwd}) {
+            return firebase.auth().signInWithEmailAndPassword(email, pwd)
         },
-        LOGOUT() {
+        GET_USER() {
+            return firebase.auth().currentUser;
+        },
+        SIGN_OUT() {
             return firebase.auth().signOut()
         },
         GET_BOARDS({commit}) {
@@ -109,12 +89,13 @@ export default new Vuex.Store({
                     data.id = id
                     commit('SET_BOARD', data)
                 })
-        }
-        ,
+        },
         SET_BOARD({commit}, {title, content}) {
+            const user = firebase.auth().currentUser
             return firebase.firestore().collection('boards').add({
                 title: title,
                 content: content,
+                uid: user.uid,
                 date: new Date()
             })
         }
