@@ -14,6 +14,7 @@
     "vue-firestore": "^0.3.21",
     "vue-router": "^3.0.3",
     "vuefire": "^2.0.0-alpha.21",
+    "vuejs-logger": "1.5.3",
     "vuetify": "^1.5.5",
     "vuex": "^3.0.1"
   },

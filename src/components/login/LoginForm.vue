@@ -1,6 +1,6 @@
 <template>
     <v-layout row justify-center>
-        <v-form ref="form" v-model="valid" lazy-validation style="position: relative; top: 200px;">
+        <v-form ref="form" lazy-validation style="position: relative; top: 200px;">
             <v-text-field
                     v-model="email"
                     label="Id"
@@ -28,7 +28,6 @@
         name: "LoginForm",
         data() {
             return {
-                valid: false,
                 email: '',
                 pwd: ''
             }
@@ -47,7 +46,7 @@
                 const pwd = this.pwd;
                 this.SIGN_IN({email, pwd})
                     .then(_ => {
-                        this.$router.replace(this.beforeUrl || '/')
+                        this.$router.replace(decodeURIComponent(this.beforeUrl) || '/')
                         this.CLEAR_BEFORE_URL()
                         return this.GET_USER();
                     })
@@ -55,8 +54,7 @@
                         console.log(user.uid)
                     })
             }
-        },
-
+        }
     }
 </script>
 

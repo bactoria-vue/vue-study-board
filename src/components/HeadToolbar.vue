@@ -18,11 +18,14 @@
         name: "HeadToolbar",
         data() {
             return {
-                isAuthenticated: ''
+                isAuthenticated: false
             }
         },
         mounted() {
-            this.isAuthenticated = firebase.auth().currentUser
+            this.$log.debug(firebase.auth().currentUser)
+        },
+        updated() {
+            this.isAuthenticated = !!firebase.auth().currentUser
         },
         methods: {
             ...mapActions(['SIGN_OUT']),

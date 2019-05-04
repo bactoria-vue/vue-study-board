@@ -5,17 +5,20 @@ import Login from '../views/Login.vue'
 import BoardList from '../views/BoardList.vue'
 import Board from '../views/Board.vue'
 import store from '../store'
+import firebase from 'firebase'
 
 Vue.use(Router)
 
 const requireAuth = () => (from, to, next) => {
     store.state.beforeUrl = encodeURIComponent(from.path)
 
-    store.dispatch('GET_USER').then(user =>
-        !!user ?
-            next() :
-            next(`/login`)
-    )
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            next()
+        } else {
+            next('/login')
+        }
+    });
 }
 
 export default new Router({
@@ -34,7 +37,7 @@ export default new Router({
         {
             path: '/board/',
             component: BoardList,
-            //  beforeEnter: requireAuth()
+            beforeEnter: requireAuth()
         },
         {
             path: '/board/:id',

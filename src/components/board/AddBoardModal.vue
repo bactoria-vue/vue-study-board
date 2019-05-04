@@ -41,12 +41,12 @@
             ...mapState(['showAddBoardModal'])
         },
         methods: {
-            ...mapActions(['SET_BOARD']),
+            ...mapActions(['ADD_BOARD']),
             ...mapMutations(['CLOSE_ADD_BOARD_MODAL']),
             register() {
                 const title = this.title;
                 const content = this.content;
-                this.SET_BOARD({title, content})
+                this.ADD_BOARD({title, content})
                     .then(docRef => {
                         this.closeModal();
                     })

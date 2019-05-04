@@ -33,13 +33,15 @@
             }
         },
         computed: {...mapState(['board'])},
-        mounted() {
-            this.isAuthorizated = firebase.auth().currentUser.uid == this.board.uid;
+        created() {
             const id = this.$route.params
-            this.GET_BOARD(id)
+            this.SET_BOARD(id).then(res => {
+                let uid = firebase.auth().currentUser.uid;
+                this.isAuthorizated = uid === this.board.uid;
+            })
         },
         methods: {
-            ...mapActions(['GET_BOARD', 'DELETE_BOARD']),
+            ...mapActions(['SET_BOARD', 'DELETE_BOARD']),
             ...mapMutations(['SHOW_MODIFY_BOARD_MODAL']),
             showModifyBoard() {
                 this.SHOW_MODIFY_BOARD_MODAL()
@@ -48,9 +50,10 @@
                 const id = this.board.id
                 this.DELETE_BOARD({id})
             }
+        },
+        updated() {
+                this.$log.debug(this.board)
         }
-
-
     }
 </script>
 
