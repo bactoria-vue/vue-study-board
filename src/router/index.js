@@ -28,7 +28,7 @@ export default new Router({
         {
             path: '/',
             component: Home,
-            beforeEnter: requireAuth()
+         //   beforeEnter: requireAuth()
         },
         {
             path: '/login',
@@ -37,12 +37,12 @@ export default new Router({
         {
             path: '/board/',
             component: BoardList,
-            beforeEnter: requireAuth()
+         //   beforeEnter: requireAuth()
         },
         {
             path: '/board/:id',
             component: Board,
-            beforeEnter: requireAuth()
+   //         beforeEnter: requireAuth()
         }
     ]
 })

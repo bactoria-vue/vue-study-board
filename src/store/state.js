@@ -1,12 +1,14 @@
 const state = {
     showSignUpModal: false,
-        showAddBoardModal: false,
-        showModifyBoardModal: false,
+    showAddBoardModal: false,
+    showModifyBoardModal: false,
 
-        beforeUrl: '',
+    beforeUrl: '',
 
-        boards: [],
-        board: '',
+    boards: [],
+    board: '',
+
+    accessToken: ''
 }
 
 export default state

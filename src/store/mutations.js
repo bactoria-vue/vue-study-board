@@ -1,3 +1,5 @@
+import { setAuthInHeader } from '../api'
+
 const mutations = {
     SHOW_SIGN_UP_MODAL(state) {
         state.showSignUpModal = true;
@@ -28,9 +30,16 @@ const mutations = {
     SET_BOARD(state, payload) {
         state.board = payload
     },
-    CLEAR_BOARD(state) {
-        state.board = ''
+
+    SIGN_IN(state, accessToken) {
+        if (!accessToken) return
+        state.accessToken = accessToken
+        localStorage.accessToken = accessToken
+        setAuthInHeader(accessToken)
     },
+    SET_REFRESH_TOKEN(state, refreshToken) {
+        state.refreshToken = refreshToken
+    }
 }
 
 export default mutations

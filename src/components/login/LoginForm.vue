@@ -48,7 +48,6 @@
                     .then(_ => {
                         this.$router.replace(decodeURIComponent(this.beforeUrl) || '/')
                         this.CLEAR_BEFORE_URL()
-                        return this.GET_USER();
                     })
                     .then(user => {
                         console.log(user.uid)
