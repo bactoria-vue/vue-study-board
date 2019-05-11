@@ -3,8 +3,8 @@
         <v-toolbar-title class="headline text-uppercase">
             <router-link to="/">Home</router-link>
             <router-link to="/board">Board</router-link>
-            <v-btn @click="login" v-if="isAuthenticated">Login</v-btn>
-            <v-btn @click="logout" v-else>Logout</v-btn>
+            <v-btn @click="logout">Login</v-btn>
+            <v-btn @click="logout">Logout</v-btn>
         </v-toolbar-title>
         <v-spacer></v-spacer>
     </v-toolbar>
@@ -12,7 +12,6 @@
 
 <script>
     import {mapActions} from 'vuex'
-    import firebase from 'firebase'
 
     export default {
         name: "HeadToolbar",
@@ -20,12 +19,6 @@
             return {
                 isAuthenticated: false
             }
-        },
-        mounted() {
-            this.$log.debug(firebase.auth().currentUser)
-        },
-        updated() {
-            this.isAuthenticated = !!firebase.auth().currentUser
         },
         methods: {
             ...mapActions(['SIGN_OUT']),

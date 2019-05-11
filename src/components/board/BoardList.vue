@@ -32,11 +32,7 @@
         },
         created() {
             this.SET_BOARDS()
-            this.$log.info('test1')
-            this.$log.warn('test2')
-            this.$log.debug('test3')
-            this.$log.error('test4')
-            this.$log.fatal('test5')
+            this.$log.debug('BoardList Component')
         },
         methods: {
             ...mapActions(['SET_BOARDS']),

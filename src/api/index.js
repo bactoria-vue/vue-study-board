@@ -1,84 +1,56 @@
-import axios from 'axios'
-import router from '../router'
+import firebase from 'firebase'
 
-const domain = 'http://localhost:3000'
-const Unauthorized = 401
-const onUnauthorized = () => {
-    router.push(`/login?returnPath=${encodeURIComponent(location.pathname)}`)
-}
-
-const request = {
-    get(path) {
-        return axios.get(`${domain + path}`)
-            .catch(({response}) => {
-                const {status} = response
-                if (status === Unauthorized) return onUnauthorized()
-                throw Error(response)
-            })
-    },
-    post(path, data) {
-        return axios.post(`${domain + path}`, data)
-    },
-    delete(path) {
-        return axios.delete(`${domain + path}`)
-    },
-    put(path, data) {
-        return axios.put(`${domain + path}`, data)
-    }
-}
-
-export const setAuthInHeader = token => {
-    axios.defaults.headers.common['Authorization'] = token ? `Bearer ${token}` : null;
-}
+firebase.initializeApp({
+    apiKey: "AIzaSyDSuhX9SqwloDWezLak1aFSFUhiMk47CFw",
+    authDomain: "board-762ba.firebaseapp.com",
+    databaseURL: "https://board-762ba.firebaseio.com",
+    projectId: "board-762ba",
+    storageBucket: "board-762ba.appspot.com",
+    messagingSenderId: "525568648776"
+})
 
 export const auth = {
-    login(email, password) {
-        return request.post('/login', {email, password})
-            .then(({data}) => data)
+    signUp(email, pwd) {
+        return firebase.auth().createUserWithEmailAndPassword(email, pwd)
+    },
+    login(email, pwd) {
+        return firebase.auth().signInWithEmailAndPassword(email, pwd)
+    },
+    logout() {
+        return firebase.auth().signOut()
+    },
+    isAuthenticated() {
+        return new Promise(function (resolve) {
+            firebase.auth().onAuthStateChanged(function (user) {
+                resolve(user.uid);
+            });
+        });
     }
 }
 
 export const board = {
     fetch(id) {
         if (id) {
-            return request.get(`/boards/${id}`).then(({ data }) => data)
+            return firebase.firestore().collection('boards').doc(id).get()
         }
-        return request.get('/boards').then(({data}) => data)
+        return firebase.firestore().collection('boards').orderBy("date", "desc").get()
     },
-    create (title) {
-        return request.post('/boards', { title }).then(({ data }) => data)
+    create(title, content) {
+        const user = firebase.auth().currentUser
+        return firebase.firestore().collection('boards').add({
+            title: title,
+            content: content,
+            uid: user.uid,
+            date: new Date()
+        })
     },
-    update(id, data) {
-        return request.put(`/boards/${id}`, data).then(({ data }) => data)
-    },
-    destroy(id) {
-        return request.delete(`/boards/${id}`)
-    }
-}
-
-export const list = {
-    create(data) {
-        return request.post(`/lists`, data)
-    },
-    update(id, data) {
-        return request.put(`/lists/${id}`, data).then(({ data }) => data)
+    update(id, title, content) {
+        return firebase.firestore().collection('boards').doc(id).update({
+            title: title,
+            content: content
+        })
     },
     destroy(id) {
-        return request.delete(`/lists/${id}`).then(({ data }) => data)
-    }
-}
-
-export const card = {
-    fetch(id) {
-        return request.get(`/cards/${id}`).then(({ data }) => data)
-    },
-    create({title, listId, pos}) {
-        return request.post(`/cards`, {title, listId, pos}).then(({ data }) => data)
-    },
-    update(id, data) {
-        return request.put(`/cards/${id}`, data).then(({ data }) => data)
-    },
-    destroy(id) {
-        return request.delete(`/cards/${id}`)
+        return firebase.firestore().collection('boards').doc(id).delete()
     }
 }

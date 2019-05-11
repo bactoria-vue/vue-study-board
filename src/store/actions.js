@@ -1,34 +1,33 @@
-import firebase from "firebase";
+import {auth, board} from '../api'
 
 const actions = {
     SIGN_UP(_, {email, pwd}) {
-        return firebase.auth().createUserWithEmailAndPassword(email, pwd)
-            .then((user) => {
-                console.log(user)
-            })
-            .catch((error) => {
-                console.log(error)
+        return auth.signUp(email, pwd)
+            .catch(error => {
+                alert(error.message)
+                throw error
             })
     },
     SIGN_IN(_, {email, pwd}) {
-        return firebase.auth().signInWithEmailAndPassword(email, pwd)
+        return auth.login(email, pwd)
     },
     SIGN_OUT() {
-        return firebase.auth().signOut()
+        return auth.logout()
     },
     SET_BOARDS({commit}) {
-        firebase.firestore().collection('boards').orderBy("date", "desc").onSnapshot(function (querySnapshot) {
-            var datas = [];
-            querySnapshot.forEach(doc => {
-                const data = doc.data();
-                data.id = doc.id;
-                datas.push(data)
-            });
-            commit('SET_BOARDS', datas);
-        });
+        return board.fetch()
+            .then(docs => {
+                var datas = [];
+            docs.forEach(doc => {
+                    const data = doc.data();
+                    data.id = doc.id;
+                    datas.push(data)
+                });
+                commit('SET_BOARDS', datas);
+            })
     },
     SET_BOARD({commit}, {id}) {
-        return firebase.firestore().collection('boards').doc(id).get()
+        return board.fetch(id)
             .then(doc => {
                 const data = doc.data()
                 data.id = id
@@ -36,22 +35,24 @@ const actions = {
             })
     },
     ADD_BOARD({commit}, {title, content}) {
-        const user = firebase.auth().currentUser
-        return firebase.firestore().collection('boards').add({
-            title: title,
-            content: content,
-            uid: user.uid,
-            date: new Date()
-        })
+        return board.create(title, content)
+            .then(_ => board.fetch()
+                .then(docs => {
+                    var datas = [];
+                    docs.forEach(doc => {
+                        const data = doc.data();
+                        data.id = doc.id;
+                        datas.push(data)
+                    });
+                    commit('SET_BOARDS', datas);
+                })
+            )
     },
     MODIFY_BOARD(_, {id, title, content}) {
-        return firebase.firestore().collection('boards').doc(id).update({
-            title: title,
-            content: content
-        })
+        return board.update(id, title, content)
     },
     DELETE_BOARD({commit}, {id}) {
-        firebase.firestore().collection('boards').doc(id).delete()
+        return board.destroy(id)
             .then(_ => {
                 commit('CLEAR_BOARD')
             })

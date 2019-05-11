@@ -37,7 +37,7 @@
         },
         methods: {
             ...mapMutations(['SHOW_SIGN_UP_MODAL', 'SET_USER', 'SET_IS_AUTHENTICATED', 'CLEAR_BEFORE_URL']),
-            ...mapActions(['SIGN_IN', 'GET_USER']),
+            ...mapActions(['SIGN_IN']),
             signUp() {
                 this.SHOW_SIGN_UP_MODAL()
             },
@@ -48,10 +48,6 @@
                     .then(_ => {
                         this.$router.replace(decodeURIComponent(this.beforeUrl) || '/')
                         this.CLEAR_BEFORE_URL()
-                        return this.GET_USER();
-                    })
-                    .then(user => {
-                        console.log(user.uid)
                     })
             }
         }

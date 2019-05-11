@@ -5,20 +5,15 @@ import Login from '../views/Login.vue'
 import BoardList from '../views/BoardList.vue'
 import Board from '../views/Board.vue'
 import store from '../store'
-import firebase from 'firebase'
+import {auth} from '../api'
 
 Vue.use(Router)
 
 const requireAuth = () => (from, to, next) => {
     store.state.beforeUrl = encodeURIComponent(from.path)
 
-    firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-            next()
-        } else {
-            next('/login')
-        }
-    });
+    auth.isAuthenticated()
+        .then(user => !!user.uid ? next() : next('/login'))
 }
 
 export default new Router({

@@ -56,11 +56,10 @@
 
                 this.SIGN_UP({ email, name, pwd })
                     .then((user) => {
-                        console.log(user)
                         this.closeModal()
                     })
                     .catch((error) => {
-                        console.log(error)
+                        this.$log.error(`회원가입 실패 ${error}`)
                     })
             }
         }

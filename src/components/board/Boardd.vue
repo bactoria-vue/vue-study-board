@@ -35,10 +35,12 @@
         computed: {...mapState(['board'])},
         created() {
             const id = this.$route.params
-            this.SET_BOARD(id).then(res => {
-                let uid = firebase.auth().currentUser.uid;
-                this.isAuthorizated = uid === this.board.uid;
-            })
+            this.SET_BOARD(id)
+                .then(res => {
+                    let uid = firebase.auth().currentUser.uid;
+                    this.isAuthorizated = uid === this.board.uid;
+                    this.$log.debug(this.board)
+                })
         },
         methods: {
             ...mapActions(['SET_BOARD', 'DELETE_BOARD']),
@@ -50,9 +52,6 @@
                 const id = this.board.id
                 this.DELETE_BOARD({id})
             }
-        },
-        updated() {
-                this.$log.debug(this.board)
         }
     }
 </script>
