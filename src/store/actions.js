@@ -3,16 +3,16 @@ import {auth, board} from '../api'
 const actions = {
     SIGN_UP(_, {email, pwd}) {
         const account = {}
-        account.email=email;
-        account.password=pwd;
-        account.name="주노"
-        account.phone="01044444444"
+        account.email = email;
+        account.password = pwd;
+        account.name = "주노"
+        account.phone = "01044444444"
 
         return auth.singup(account);
     },
     SIGN_IN({commit}, {email, pwd}) {
         return auth.login(email, pwd)
-            .then(data  => {
+            .then(data => {
                 commit('SIGN_IN', data.accessToken)
                 commit('SET_REFRESH_TOKEN', data.refreshToken)
             })
@@ -23,7 +23,7 @@ const actions = {
 
     SET_BOARDS({commit}) {
         board.fetch()
-            .then(boards=> commit('SET_BOARDS', boards))
+            .then(boards => commit('SET_BOARDS', boards.content))
     },
     SET_BOARD({commit}, {id}) {
         board.fetch(id)

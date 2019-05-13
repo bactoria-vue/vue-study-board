@@ -32,18 +32,12 @@
         },
         created() {
             this.SET_BOARDS()
-            this.$log.info('test1')
-            this.$log.warn('test2')
-            this.$log.debug('test3')
-            this.$log.error('test4')
-            this.$log.fatal('test5')
         },
         methods: {
             ...mapActions(['SET_BOARDS']),
             ...mapMutations(['SHOW_ADD_BOARD_MODAL']),
             addBoardModal() {
                 this.SHOW_ADD_BOARD_MODAL();
-                this.$log.debug('log from function outside component.');
             }
         }
     }

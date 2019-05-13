@@ -50,9 +50,6 @@
                 const id = this.board.id
                 this.DELETE_BOARD({id})
             }
-        },
-        updated() {
-                this.$log.debug(this.board)
         }
     }
 </script>
