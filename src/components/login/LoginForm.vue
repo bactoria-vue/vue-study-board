@@ -46,8 +46,12 @@
                 const pwd = this.pwd;
                 this.SIGN_IN({email, pwd})
                     .then(_ => {
+                        this.$log.debug("로그인 성공")
                         this.$router.replace(decodeURIComponent(this.beforeUrl) || '/')
                         this.CLEAR_BEFORE_URL()
+                    })
+                    .catch(error => {
+                        this.$log.debug("로그인 실패 " + error)
                     })
             }
         }

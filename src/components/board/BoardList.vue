@@ -8,9 +8,10 @@
                 </v-toolbar>
                 <v-list three-line>
                     <router-link :to="'/board/' + board.id" v-for="board in boards">
-                        <board-list-card :board="board"/>
+                        <board-list-data :board="board"/>
                     </router-link>
                 </v-list>
+                <infinite-loading v-if="page" @infinite="infiniteHandler"></infinite-loading>
             </v-card>
 
             <div align="center">
@@ -21,25 +22,36 @@
 </template>
 
 <script>
-    import BoardListCard from "./BoardListCard";
     import {mapActions, mapMutations, mapState} from "vuex";
+    import InfiniteLoading from 'vue-infinite-loading';
+    import BoardListData from "./BoardListData";
 
     export default {
         name: "BoardList",
-        components: {BoardListCard},
+        components: {BoardListData, InfiniteLoading},
         computed: {
-            ...mapState(['boards'])
+            ...mapState(['boards', 'page'])
         },
         created() {
-            this.SET_BOARDS()
             this.$log.debug('BoardList Component')
         },
         methods: {
-            ...mapActions(['SET_BOARDS']),
+            ...mapActions(['GET_BOARDS']),
             ...mapMutations(['SHOW_ADD_BOARD_MODAL']),
             addBoardModal() {
                 this.SHOW_ADD_BOARD_MODAL();
                 this.$log.debug('log from function outside component.');
+            },
+            infiniteHandler($state) {
+                this.$log.debug("fetch boards")
+                this.GET_BOARDS(this.page)
+                    .then(docs => {
+                        if (docs.docs.length) {
+                            $state.loaded();
+                        } else {
+                            $state.complete();
+                        }
+                    })
             }
         }
     }

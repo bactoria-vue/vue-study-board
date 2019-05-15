@@ -21,15 +21,23 @@ const mutations = {
     CLEAR_BEFORE_URL(state) {
         state.beforeUrl = ''
     },
-
     SET_BOARDS(state, payload) {
-        state.boards = payload
+        state.boards.push(...payload)
     },
     SET_BOARD(state, payload) {
         state.board = payload
     },
+    SET_PAGE(state, payload) {
+        state.page = payload
+    },
+    INIT_PAGE(state) {
+        state.page = 'first'
+    },
     CLEAR_BOARD(state) {
         state.board = ''
+    },
+    CLEAR_BOARDS(state) {
+        state.boards = []
     },
 }
 

@@ -14,19 +14,21 @@ const actions = {
     SIGN_OUT() {
         return auth.logout()
     },
-    SET_BOARDS({commit}) {
-        return board.fetch()
+    GET_BOARDS({commit}, page) {
+        return board.fetchs(page)
             .then(docs => {
                 var datas = [];
-            docs.forEach(doc => {
+                docs.forEach(doc => {
                     const data = doc.data();
                     data.id = doc.id;
                     datas.push(data)
                 });
+                commit('SET_PAGE', docs.page);
                 commit('SET_BOARDS', datas);
+                return docs
             })
     },
-    SET_BOARD({commit}, {id}) {
+    GET_BOARD({commit}, {id}) {
         return board.fetch(id)
             .then(doc => {
                 const data = doc.data()
@@ -36,17 +38,10 @@ const actions = {
     },
     ADD_BOARD({commit}, {title, content}) {
         return board.create(title, content)
-            .then(_ => board.fetch()
-                .then(docs => {
-                    var datas = [];
-                    docs.forEach(doc => {
-                        const data = doc.data();
-                        data.id = doc.id;
-                        datas.push(data)
-                    });
-                    commit('SET_BOARDS', datas);
-                })
-            )
+            .then(_ => {
+                commit('CLEAR_BOARDS')
+                commit('INIT_PAGE')
+            })
     },
     MODIFY_BOARD(_, {id, title, content}) {
         return board.update(id, title, content)

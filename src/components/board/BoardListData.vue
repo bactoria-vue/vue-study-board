@@ -10,7 +10,7 @@
 
 <script>
     export default {
-        name: "BoardListCard",
+        name: "BoardListData",
         props: ['board']
     }
 </script>

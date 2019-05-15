@@ -25,7 +25,7 @@
     import firebase from 'firebase'
 
     export default {
-        name: "Boardd",
+        name: "BoardData",
         components: {ModifyBoardModal},
         data() {
             return {
@@ -35,7 +35,7 @@
         computed: {...mapState(['board'])},
         created() {
             const id = this.$route.params
-            this.SET_BOARD(id)
+            this.GET_BOARD(id)
                 .then(res => {
                     let uid = firebase.auth().currentUser.uid;
                     this.isAuthorizated = uid === this.board.uid;
@@ -43,8 +43,8 @@
                 })
         },
         methods: {
-            ...mapActions(['SET_BOARD', 'DELETE_BOARD']),
-            ...mapMutations(['SHOW_MODIFY_BOARD_MODAL']),
+            ...mapActions(['GET_BOARD', 'DELETE_BOARD']),
+            ...mapMutations(['SHOW_MODIFY_BOARD_MODAL', 'CLEAR_BOARD']),
             showModifyBoard() {
                 this.SHOW_MODIFY_BOARD_MODAL()
             },
@@ -52,6 +52,9 @@
                 const id = this.board.id
                 this.DELETE_BOARD({id})
             }
+        },
+        destroyed() {
+            this.CLEAR_BOARD()
         }
     }
 </script>

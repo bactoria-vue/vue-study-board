@@ -11,7 +11,12 @@ firebase.initializeApp({
 
 export const auth = {
     signUp(email, pwd) {
+        const userInfo = {
+            username: "이름"
+        }
+
         return firebase.auth().createUserWithEmailAndPassword(email, pwd)
+//            .then(user => firebase.firestore().collection('users').doc(user.user.uid).set(userInfo))
     },
     login(email, pwd) {
         return firebase.auth().signInWithEmailAndPassword(email, pwd)
@@ -22,18 +27,42 @@ export const auth = {
     isAuthenticated() {
         return new Promise(function (resolve) {
             firebase.auth().onAuthStateChanged(function (user) {
-                resolve(user.uid);
+                resolve(user);
             });
         });
     }
 }
+
+const boardLimit = 10;
 
 export const board = {
     fetch(id) {
         if (id) {
             return firebase.firestore().collection('boards').doc(id).get()
         }
-        return firebase.firestore().collection('boards').orderBy("date", "desc").get()
+    },
+    fetchs(page) {
+
+        if (page === 'first') {
+            return firebase.firestore().collection('boards')
+                .orderBy("date", "desc")
+                .limit(boardLimit)
+                .get()
+                .then(docs => {
+                    docs.page = docs.docs[docs.docs.length - 1]
+                    return docs
+                })
+        }
+
+        return firebase.firestore().collection('boards')
+            .orderBy("date", "desc")
+            .startAfter(page)
+            .limit(boardLimit)
+            .get()
+            .then(docs => {
+                docs.page = docs.docs[docs.docs.length - 1]
+                return docs
+            })
     },
     create(title, content) {
         const user = firebase.auth().currentUser
@@ -43,13 +72,15 @@ export const board = {
             uid: user.uid,
             date: new Date()
         })
-    },
+    }
+    ,
     update(id, title, content) {
         return firebase.firestore().collection('boards').doc(id).update({
             title: title,
             content: content
         })
-    },
+    }
+    ,
     destroy(id) {
         return firebase.firestore().collection('boards').doc(id).delete()
     }

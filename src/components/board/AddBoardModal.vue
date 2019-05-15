@@ -47,7 +47,7 @@
                 const title = this.title;
                 const content = this.content;
                 this.ADD_BOARD({title, content})
-                    .then(docRef => {
+                    .then(_ => {
                         this.closeModal();
                     })
                     .catch(function (error) {

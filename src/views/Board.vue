@@ -1,15 +1,15 @@
 <template>
     <div>
-        <boardd/>
+        <boardData/>
     </div>
 </template>
 
 <script>
-    import Boardd from "../components/board/Boardd";
+    import BoardData from "../components/board/BoardData";
 
     export default {
         name: "Board",
-        components: {Boardd},
+        components: {BoardData},
     }
 </script>
 
