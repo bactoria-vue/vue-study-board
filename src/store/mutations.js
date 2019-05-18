@@ -27,11 +27,11 @@ const mutations = {
     SET_BOARD(state, payload) {
         state.board = payload
     },
-    SET_PAGE(state, payload) {
-        state.page = payload
+    SET_LAST_DOC(state, payload) {
+        state.lastDoc = payload
     },
-    INIT_PAGE(state) {
-        state.page = 'first'
+    CLEAR_LAST_DOC(state) {
+        state.lastDoc = String
     },
     CLEAR_BOARD(state) {
         state.board = ''

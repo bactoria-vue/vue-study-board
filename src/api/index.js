@@ -41,26 +41,25 @@ export const board = {
             return firebase.firestore().collection('boards').doc(id).get()
         }
     },
-    fetchs(page) {
-
-        if (page === 'first') {
+    fetchs(lastDoc) {
+        if (lastDoc === String) {
             return firebase.firestore().collection('boards')
                 .orderBy("createdDateTime", "desc")
                 .limit(boardLimit)
                 .get()
                 .then(docs => {
-                    docs.page = docs.docs[docs.docs.length - 1]
+                    docs.lastDoc = docs.docs[docs.docs.length - 1]
                     return docs
                 })
         }
 
         return firebase.firestore().collection('boards')
             .orderBy("createdDateTime", "desc")
-            .startAfter(page)
+            .startAfter(lastDoc)
             .limit(boardLimit)
             .get()
             .then(docs => {
-                docs.page = docs.docs[docs.docs.length - 1]
+                docs.lastDoc = docs.docs[docs.docs.length - 1]
                 return docs
             })
     },
@@ -86,8 +85,7 @@ export const board = {
             content: content
         })
             .catch(error => alert(error));
-    }
-    ,
+    },
     destroy(id) {
         return firebase.firestore().collection('boards').doc(id).delete()
     }

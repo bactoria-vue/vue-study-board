@@ -7,7 +7,7 @@ const state = {
 
     boards: [],
     board: '',
-    page: 'first'
+    lastDoc: String,
 }
 
 export default state

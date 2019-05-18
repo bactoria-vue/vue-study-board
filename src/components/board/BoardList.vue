@@ -12,7 +12,7 @@
                         </router-link>
                     </v-list-tile>
                 </v-list>
-                <infinite-loading v-if="page" @infinite="infiniteHandler"></infinite-loading>
+                <infinite-loading v-if="lastDoc" @infinite="infiniteHandler"></infinite-loading>
             </v-card>
 
             <div align="center">
@@ -31,10 +31,7 @@
         name: "BoardList",
         components: {BoardListData, InfiniteLoading},
         computed: {
-            ...mapState(['boards', 'page'])
-        },
-        created() {
-            this.$log.debug('BoardList Component')
+            ...mapState(['boards', 'lastDoc'])
         },
         methods: {
             ...mapActions(['GET_BOARDS']),
@@ -44,15 +41,16 @@
                 this.$log.debug('log from function outside component.');
             },
             infiniteHandler($state) {
-                this.$log.debug("fetch boards")
-                this.GET_BOARDS(this.page)
-                    .then(docs => {
-                        if (docs.docs.length) {
-                            $state.loaded();
-                        } else {
-                            $state.complete();
-                        }
-                    })
+                console.log(this.lastDoc)
+                    this.$log.debug("fetch boards")
+                    this.GET_BOARDS(this.lastDoc)
+                        .then(docs => {
+                            if (docs.docs.length) {
+                                $state.loaded();
+                            } else {
+                                $state.complete();
+                            }
+                        })
             }
         }
     }

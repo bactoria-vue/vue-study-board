@@ -10,8 +10,8 @@ const actions = {
     SIGN_OUT() {
         return auth.logout()
     },
-    GET_BOARDS({commit}, page) {
-        return board.fetchs(page)
+    GET_BOARDS({commit}, lastDoc) {
+        return board.fetchs(lastDoc)
             .then(docs => {
                 var datas = [];
                 docs.forEach(doc => {
@@ -19,7 +19,35 @@ const actions = {
                     data.id = doc.id;
                     datas.push(data)
                 });
-                commit('SET_PAGE', docs.page);
+                commit('SET_LAST_DOC', docs.lastDoc);
+                commit('SET_BOARDS', datas);
+                return docs
+            })
+    },
+    GET_BOARDS_FIRST({commit}) {
+        return board.fetchsFirst()
+            .then(docs => {
+                var datas = [];
+                docs.forEach(doc => {
+                    const data = doc.data();
+                    data.id = doc.id;
+                    datas.push(data)
+                });
+                commit('SET_LAST_DOC', docs.lastDoc);
+                commit('SET_BOARDS', datas);
+                return docs
+            })
+    },
+    GET_BOARDS_NEXT({commit}, lastDoc) {
+        return board.fetchsNext(lastDoc)
+            .then(docs => {
+                var datas = [];
+                docs.forEach(doc => {
+                    const data = doc.data();
+                    data.id = doc.id;
+                    datas.push(data)
+                });
+                commit('SET_LAST_DOC', docs.lastDoc);
                 commit('SET_BOARDS', datas);
                 return docs
             })
@@ -36,11 +64,10 @@ const actions = {
         return board.create(boardInfo)
             .then(_ => {
                 commit('CLEAR_BOARDS')
-                commit('INIT_PAGE')
+                commit('CLEAR_LAST_DOC')
             })
     },
     MODIFY_BOARD(_, boardInfo) {
-        console.log(boardInfo)
         return board.update(boardInfo)
     },
     DELETE_BOARD({commit}, {id}) {
