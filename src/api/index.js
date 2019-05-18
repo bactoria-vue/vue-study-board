@@ -28,10 +28,14 @@ export const auth = {
         return firebase.auth().signOut()
     },
     async isAuthenticated() {
+        let isAuthenticated = false;
         await firebase.auth().onAuthStateChanged(function (user) {
-            return !!user.uid
-        });
-    }
+            if (!!user) {
+                isAuthenticated = true
+            }
+        })
+        return isAuthenticated
+    },
 }
 
 const boardLimit = 10;

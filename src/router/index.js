@@ -9,10 +9,11 @@ import {auth} from '../api'
 
 Vue.use(Router)
 
-const requireAuth = () => (from, to, next) => {
+const requireAuth = () => async (from, to, next) => {
     store.state.beforeUrl = encodeURIComponent(from.path)
+    const isAuthenticated = await auth.isAuthenticated()
 
-    if (auth.isAuthenticated()) {
+    if (isAuthenticated) {
         next()
     } else {
         next('/login')
