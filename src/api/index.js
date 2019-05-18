@@ -10,13 +10,16 @@ firebase.initializeApp({
 })
 
 export const auth = {
-    signUp(email, pwd) {
-        const userInfo = {
-            username: "이름"
-        }
-
+    signUp({email, pwd, username, phone}) {
         return firebase.auth().createUserWithEmailAndPassword(email, pwd)
-//            .then(user => firebase.firestore().collection('users').doc(user.user.uid).set(userInfo))
+            .then(_ => {
+                const user = firebase.auth().currentUser;
+                return user.updateProfile({
+                    displayName: username
+                })
+            })
+            .then(user => firebase.firestore().collection('users').doc(user.uid).set({phone}))
+            .catch(error => alert(`회원가입 실패 ${error.message}`))
     },
     login(email, pwd) {
         return firebase.auth().signInWithEmailAndPassword(email, pwd)
@@ -24,12 +27,9 @@ export const auth = {
     logout() {
         return firebase.auth().signOut()
     },
-    isAuthenticated() {
-        return new Promise(function (resolve) {
-            firebase.auth().onAuthStateChanged(function (user) {
-                resolve(user);
-            });
-        });
+    async isAuthenticated() {
+        const user = await firebase.auth().currentUser
+        return !!user.uid
     }
 }
 
@@ -45,7 +45,7 @@ export const board = {
 
         if (page === 'first') {
             return firebase.firestore().collection('boards')
-                .orderBy("date", "desc")
+                .orderBy("createdDateTime", "desc")
                 .limit(boardLimit)
                 .get()
                 .then(docs => {
@@ -55,7 +55,7 @@ export const board = {
         }
 
         return firebase.firestore().collection('boards')
-            .orderBy("date", "desc")
+            .orderBy("createdDateTime", "desc")
             .startAfter(page)
             .limit(boardLimit)
             .get()
@@ -64,25 +64,28 @@ export const board = {
                 return docs
             })
     },
-    create(title, content) {
+    create({title, content}) {
         const user = firebase.auth().currentUser
         return firebase.firestore().collection('boards').add({
-            title: title,
-            content: content,
+            title,
+            content,
             uid: user.uid,
-            date: new Date()
+            username: user.displayName,
+            createdDateTime: new Date()
         })
-    }
-    ,
-    update(modBoard) {
-        const id = modBoard.id
-        const title = modBoard.title
-        const content = modBoard.content
+            .catch(error => alert(error));
+    },
+    update(boardInfo) {
+        console.log(boardInfo)
+        const id = boardInfo.id
+        const title = boardInfo.title
+        const content = boardInfo.content
 
         return firebase.firestore().collection('boards').doc(id).update({
             title: title,
             content: content
         })
+            .catch(error => alert(error));
     }
     ,
     destroy(id) {

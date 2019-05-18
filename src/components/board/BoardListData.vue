@@ -1,10 +1,14 @@
 <template>
     <div>
-        <template>
-            <v-subheader>
-                {{ board.title }}
-            </v-subheader>
-        </template>
+            <v-list-tile-content>
+                <v-list-tile-title v-text="board.title"/>
+            </v-list-tile-content>
+
+            <v-spacer></v-spacer>
+
+            <v-list-tile-sub-title>
+                {{board.username}}
+            </v-list-tile-sub-title>
     </div>
 </template>
 

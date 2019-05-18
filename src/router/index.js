@@ -12,8 +12,11 @@ Vue.use(Router)
 const requireAuth = () => (from, to, next) => {
     store.state.beforeUrl = encodeURIComponent(from.path)
 
-    auth.isAuthenticated()
-        .then(user => !!user.uid ? next() : next('/login'))
+    if (auth.isAuthenticated()) {
+        next()
+    } else {
+        next('/login')
+    }
 }
 
 export default new Router({

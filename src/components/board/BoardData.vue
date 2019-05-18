@@ -6,13 +6,16 @@
                     <v-toolbar-title>{{board.title}}</v-toolbar-title>
                     <v-spacer></v-spacer>
                 </v-toolbar>
+                <v-list style="background-color: ghostwhite">
+                    작성자 : {{board.username}}
+                </v-list>
                 <v-list three-line>
                     {{board.content}}
                 </v-list>
             </v-card>
             <div align="center">
-                <v-btn v-if=isAuthorizated color="primary" @click="showModifyBoard">수정</v-btn>
-                <v-btn v-if=isAuthorizated color="warning" @click="deleteBoard">삭제</v-btn>
+                <v-btn v-if=isAuthorizated color="primary" @click.stop="showModifyBoard()">수정</v-btn>
+                <v-btn v-if=isAuthorizated color="warning" @click.stop="deleteBoard()">삭제</v-btn>
             </div>
         </v-flex>
         <modify-board-modal/>

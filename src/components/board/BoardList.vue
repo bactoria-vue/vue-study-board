@@ -4,12 +4,13 @@
             <v-card>
                 <v-toolbar color="cyan" dark>
                     <v-toolbar-title>게시판</v-toolbar-title>
-                    <v-spacer></v-spacer>
                 </v-toolbar>
-                <v-list three-line>
-                    <router-link :to="'/board/' + board.id" v-for="board in boards">
-                        <board-list-data :board="board"/>
-                    </router-link>
+                <v-list>
+                    <v-list-tile v-for="board in boards">
+                        <router-link :to="'/board/' + board.id">
+                            <board-list-data :board="board"/>
+                        </router-link>
+                    </v-list-tile>
                 </v-list>
                 <infinite-loading v-if="page" @infinite="infiniteHandler"></infinite-loading>
             </v-card>

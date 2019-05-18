@@ -7,7 +7,7 @@
             <v-form>
                 <v-text-field
                         v-validate="'required|max:12'"
-                        v-model="title"
+                        v-model="boardInfo.title"
                         label="Title"
                         name="title"
                         autofocus
@@ -16,7 +16,7 @@
                 />
                 <v-textarea
                         v-validate="'required|max:1000'"
-                        v-model="content"
+                        v-model="boardInfo.content"
                         label="Content"
                         name="content"
                         auto-grow
@@ -30,14 +30,13 @@
 </template>
 
 <script>
-    import {mapActions, mapMutations, mapState} from 'vuex';
+    import {mapActions, mapMutations} from 'vuex';
 
     export default {
         name: "AddBoardModal",
         data() {
             return {
-                title: '',
-                content: ''
+                boardInfo: {}
             }
         },
         computed: {
@@ -62,15 +61,10 @@
                 this.$validator.validateAll()
                     .then(validated => {
                         if (validated) {
-                            const title = this.title;
-                            const content = this.content;
-                            this.ADD_BOARD({title, content})
+                            this.ADD_BOARD(this.boardInfo)
                                 .then(_ => {
                                     this.closeModal();
                                 })
-                                .catch(function (error) {
-                                    console.error("Error adding document: ", error);
-                                });
                         }
                     })
             },
@@ -79,8 +73,7 @@
                 this.CLOSE_ADD_BOARD_MODAL();
             },
             clear() {
-                this.title = '';
-                this.content = '';
+                this.boardInfo = {}
             },
         }
     }

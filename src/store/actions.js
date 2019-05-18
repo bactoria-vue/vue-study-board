@@ -1,12 +1,8 @@
 import {auth, board} from '../api'
 
 const actions = {
-    SIGN_UP(_, {email, pwd}) {
-        return auth.signUp(email, pwd)
-            .catch(error => {
-                alert(error.message)
-                throw error
-            })
+    SIGN_UP(_, account) {
+        return auth.signUp(account)
     },
     SIGN_IN(_, {email, pwd}) {
         return auth.login(email, pwd)
@@ -36,15 +32,16 @@ const actions = {
                 return commit('SET_BOARD', data)
             })
     },
-    ADD_BOARD({commit}, {title, content}) {
-        return board.create(title, content)
+    ADD_BOARD({commit}, boardInfo) {
+        return board.create(boardInfo)
             .then(_ => {
                 commit('CLEAR_BOARDS')
                 commit('INIT_PAGE')
             })
     },
-    MODIFY_BOARD(_, modBoard) {
-        return board.update(modBoard)
+    MODIFY_BOARD(_, boardInfo) {
+        console.log(boardInfo)
+        return board.update(boardInfo)
     },
     DELETE_BOARD({commit}, {id}) {
         return board.destroy(id)
