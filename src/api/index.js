@@ -74,7 +74,11 @@ export const board = {
         })
     }
     ,
-    update(id, title, content) {
+    update(modBoard) {
+        const id = modBoard.id
+        const title = modBoard.title
+        const content = modBoard.content
+
         return firebase.firestore().collection('boards').doc(id).update({
             title: title,
             content: content

@@ -15,7 +15,7 @@
                 <v-btn v-if=isAuthorizated color="warning" @click="deleteBoard">삭제</v-btn>
             </div>
         </v-flex>
-        <modify-board-modal :title="board.title" :content="board.content"/>
+        <modify-board-modal/>
     </div>
 </template>
 

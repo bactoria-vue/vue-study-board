@@ -33,7 +33,7 @@ const actions = {
             .then(doc => {
                 const data = doc.data()
                 data.id = id
-                commit('SET_BOARD', data)
+                return commit('SET_BOARD', data)
             })
     },
     ADD_BOARD({commit}, {title, content}) {
@@ -43,8 +43,8 @@ const actions = {
                 commit('INIT_PAGE')
             })
     },
-    MODIFY_BOARD(_, {id, title, content}) {
-        return board.update(id, title, content)
+    MODIFY_BOARD(_, modBoard) {
+        return board.update(modBoard)
     },
     DELETE_BOARD({commit}, {id}) {
         return board.destroy(id)

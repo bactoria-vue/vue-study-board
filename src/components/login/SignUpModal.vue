@@ -4,26 +4,34 @@
             <v-card-title>
                 회원가입
             </v-card-title>
-            <v-card-text>
-                <v-text-field v-model="email" label="e-mail" required></v-text-field>
+            <v-form>
                 <v-text-field
-                        v-model="pwd"
-                        :type="'password'"
-                        label="password"
-                        @keyup.enter="register()"
-                        required
+                        v-validate="'required|email'"
+                        v-model="email"
+                        label="email"
+                        name="e-mail"
+                        autofocus
+                        :error-messages="errors.first('e-mail')"
+                        @keyup.enter="submit()"
                 ></v-text-field>
-            </v-card-text>
-            <v-card-actions>
-                <v-btn color="primary" flat @click="register">등록</v-btn>
+                <v-text-field
+                        :type="'password'"
+                        v-validate="'required|min:6|max:20'"
+                        v-model="pwd"
+                        name="password"
+                        label="Password"
+                        :error-messages="errors.first('password')"
+                        @keyup.enter="submit()"
+                ></v-text-field>
+                <v-btn color="primary" flat @click="submit">등록</v-btn>
                 <v-btn color="primary" flat @click="closeModal">Close</v-btn>
-            </v-card-actions>
+            </v-form>
         </v-card>
     </v-dialog>
 </template>
 
 <script>
-    import {mapMutations, mapState, mapActions} from 'vuex'
+    import {mapActions, mapMutations, mapState} from 'vuex'
 
     export default {
         name: "SignUpModal",
@@ -49,17 +57,23 @@
                 this.name = ''
                 this.pwd = ''
             },
-            register() {
-                const email = this.email
-                const name = this.name
-                const pwd = this.pwd
+            submit() {
 
-                this.SIGN_UP({ email, name, pwd })
-                    .then((user) => {
-                        this.closeModal()
-                    })
-                    .catch((error) => {
-                        this.$log.error(`회원가입 실패 ${error}`)
+                this.$validator.validateAll()
+                    .then(validated => {
+                        if (validated) {
+                            const email = this.email
+                            const name = this.name
+                            const pwd = this.pwd
+
+                            this.SIGN_UP({email, name, pwd})
+                                .then((user) => {
+                                    this.closeModal()
+                                })
+                                .catch(error => {
+                                    alert(`회원가입 실패 ${error.message}`)
+                                })
+                        }
                     })
             }
         }
