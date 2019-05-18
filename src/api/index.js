@@ -28,8 +28,9 @@ export const auth = {
         return firebase.auth().signOut()
     },
     async isAuthenticated() {
-        const user = await firebase.auth().currentUser
-        return !!user.uid
+        await firebase.auth().onAuthStateChanged(function (user) {
+            return !!user.uid
+        });
     }
 }
 
