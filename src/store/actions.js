@@ -24,34 +24,6 @@ const actions = {
                 return docs
             })
     },
-    GET_BOARDS_FIRST({commit}) {
-        return board.fetchsFirst()
-            .then(docs => {
-                var datas = [];
-                docs.forEach(doc => {
-                    const data = doc.data();
-                    data.id = doc.id;
-                    datas.push(data)
-                });
-                commit('SET_LAST_DOC', docs.lastDoc);
-                commit('SET_BOARDS', datas);
-                return docs
-            })
-    },
-    GET_BOARDS_NEXT({commit}, lastDoc) {
-        return board.fetchsNext(lastDoc)
-            .then(docs => {
-                var datas = [];
-                docs.forEach(doc => {
-                    const data = doc.data();
-                    data.id = doc.id;
-                    datas.push(data)
-                });
-                commit('SET_LAST_DOC', docs.lastDoc);
-                commit('SET_BOARDS', datas);
-                return docs
-            })
-    },
     GET_BOARD({commit}, {id}) {
         return board.fetch(id)
             .then(doc => {
