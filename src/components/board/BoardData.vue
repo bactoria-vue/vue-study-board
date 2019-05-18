@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-flex xs12 sm6 offset-sm3>
+        <v-flex xs8 offset-xs2>
             <v-card>
                 <v-toolbar color="cyan" dark>
                     <v-toolbar-title>{{board.title}}</v-toolbar-title>

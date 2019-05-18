@@ -1,6 +1,6 @@
 <template>
     <v-layout row>
-        <v-flex xs12 sm6 offset-sm3>
+        <v-flex xs8 offset-xs2>
             <v-card>
                 <v-toolbar color="cyan" dark>
                     <v-toolbar-title>게시판</v-toolbar-title>
@@ -14,7 +14,8 @@
                 </v-list>
                 <infinite-loading v-if="lastDoc" @infinite="infiniteHandler"></infinite-loading>
             </v-card>
-
+        </v-flex>
+        <v-flex xs2>
             <div align="center">
                 <v-btn color="primary" @click="addBoardModal">글쓰기</v-btn>
             </div>
