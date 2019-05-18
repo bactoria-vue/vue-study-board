@@ -43,7 +43,6 @@
                 this.$log.debug('log from function outside component.');
             },
             infiniteHandler($state) {
-                console.log(this.lastDoc)
                 this.$log.debug("fetch boards")
                 this.GET_BOARDS(this.lastDoc)
                     .then(docs => {

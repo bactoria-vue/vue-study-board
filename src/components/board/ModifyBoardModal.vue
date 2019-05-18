@@ -68,8 +68,6 @@
                 this.$validator.validateAll()
                     .then(validated => {
                         const boardInfo = this.boardInfo
-                    console.log(this.boardInfo)
-
                         if (validated) {
                             this.MODIFY_BOARD(boardInfo)
                                 .then(_ => {

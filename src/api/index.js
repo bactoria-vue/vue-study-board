@@ -78,7 +78,6 @@ export const board = {
             })
     },
     update(boardInfo) {
-        console.log(boardInfo)
         const id = boardInfo.id
         const title = boardInfo.title
         const content = boardInfo.content
