@@ -59,6 +59,11 @@
                 }
             }
         },
+        watch: {
+            showModifyBoardModal(val) {
+                this.$log.debug(val)
+            }
+        },
         methods: {
             ...mapActions(['MODIFY_BOARD', 'GET_BOARD']),
             ...mapMutations(['CLOSE_MODIFY_BOARD_MODAL', 'TITLE']),

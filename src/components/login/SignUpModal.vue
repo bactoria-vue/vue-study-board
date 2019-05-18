@@ -52,6 +52,10 @@
                 }
             }
         },
+        watch: {
+           showSignUpModal(val) {
+               this.$log.debug(val)
+           }
         },
         methods: {
             ...mapMutations(['CLOSE_SIGN_UP_MODAL']),

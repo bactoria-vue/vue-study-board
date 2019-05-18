@@ -50,6 +50,11 @@
                 }
             }
         },
+        watch: {
+            showAddBoardModal(val) {
+                this.$log.debug(val)
+            }
+        },
         methods: {
             ...mapActions(['ADD_BOARD']),
             ...mapMutations(['CLOSE_ADD_BOARD_MODAL']),
