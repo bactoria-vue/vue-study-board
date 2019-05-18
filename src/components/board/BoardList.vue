@@ -16,9 +16,7 @@
             </v-card>
         </v-flex>
         <v-flex xs2>
-            <div align="center">
                 <v-btn color="primary" @click="addBoardModal">글쓰기</v-btn>
-            </div>
         </v-flex>
     </v-layout>
 </template>
@@ -43,15 +41,15 @@
             },
             infiniteHandler($state) {
                 console.log(this.lastDoc)
-                    this.$log.debug("fetch boards")
-                    this.GET_BOARDS(this.lastDoc)
-                        .then(docs => {
-                            if (docs.docs.length) {
-                                $state.loaded();
-                            } else {
-                                $state.complete();
-                            }
-                        })
+                this.$log.debug("fetch boards")
+                this.GET_BOARDS(this.lastDoc)
+                    .then(docs => {
+                        if (docs.docs.length) {
+                            $state.loaded();
+                        } else {
+                            $state.complete();
+                        }
+                    })
             }
         }
     }
