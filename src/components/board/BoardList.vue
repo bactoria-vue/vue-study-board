@@ -12,11 +12,11 @@
                         </router-link>
                     </v-list-tile>
                 </v-list>
-                <infinite-loading v-if="lastDoc" @infinite="infiniteHandler"></infinite-loading>
+                <infinite-loading @infinite="infiniteHandler"></infinite-loading>
             </v-card>
         </v-flex>
         <v-flex xs2>
-                <v-btn color="primary" @click="addBoardModal">글쓰기</v-btn>
+            <v-btn color="primary" @click="addBoardModal">글쓰기</v-btn>
         </v-flex>
     </v-layout>
 </template>
@@ -31,6 +31,9 @@
         components: {BoardListData, InfiniteLoading},
         computed: {
             ...mapState(['boards', 'lastDoc'])
+        },
+        created() {
+            this.GET_BOARDS(this.lastDoc)
         },
         methods: {
             ...mapActions(['GET_BOARDS']),

@@ -27,11 +27,14 @@ const mutations = {
     SET_BOARD(state, payload) {
         state.board = payload
     },
+    ADD_BOARD(state, payload) {
+        state.boards.unshift(payload)
+    },
     SET_LAST_DOC(state, payload) {
         state.lastDoc = payload
     },
     CLEAR_LAST_DOC(state) {
-        state.lastDoc = String
+        state.lastDoc = null
     },
     CLEAR_BOARD(state) {
         state.board = ''

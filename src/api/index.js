@@ -43,7 +43,7 @@ export const board = {
         }
     },
     fetchs(lastDoc) {
-        if (lastDoc === String) {
+        if (lastDoc == null) {
             return firebase.firestore().collection('boards')
                 .orderBy("createdDateTime", "desc")
                 .limit(boardLimit)
@@ -64,16 +64,18 @@ export const board = {
                 return docs
             })
     },
-    create({title, content}) {
+    create(board) {
         const user = firebase.auth().currentUser
-        return firebase.firestore().collection('boards').add({
-            title,
-            content,
-            uid: user.uid,
-            username: user.displayName,
-            createdDateTime: new Date()
-        })
-            .catch(error => alert(error));
+        board.username = user.displayName
+        board.createdDateTime = new Date()
+        return firebase.firestore().collection('boards').add(board)
+            .catch(error => {
+                alert(error)
+            })
+            .then(doc => {
+                board.id = doc.id
+                return board
+            })
     },
     update(boardInfo) {
         console.log(boardInfo)

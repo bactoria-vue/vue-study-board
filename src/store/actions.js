@@ -63,8 +63,7 @@ const actions = {
     ADD_BOARD({commit}, boardInfo) {
         return board.create(boardInfo)
             .then(_ => {
-                commit('CLEAR_BOARDS')
-                commit('CLEAR_LAST_DOC')
+                commit('ADD_BOARD', boardInfo)
             })
     },
     MODIFY_BOARD(_, boardInfo) {
