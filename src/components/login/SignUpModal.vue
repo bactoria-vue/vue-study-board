@@ -31,7 +31,7 @@
 </template>
 
 <script>
-    import {mapActions, mapMutations, mapState} from 'vuex'
+    import {mapActions, mapMutations} from 'vuex'
 
     export default {
         name: "SignUpModal",
@@ -43,7 +43,15 @@
             }
         },
         computed: {
-            ...mapState(['showSignUpModal'])
+            showSignUpModal: {
+                get() {
+                    return this.$store.state.showSignUpModal
+                },
+                set() {
+                    this.CLOSE_SIGN_UP_MODAL()
+                }
+            }
+        },
         },
         methods: {
             ...mapMutations(['CLOSE_SIGN_UP_MODAL']),

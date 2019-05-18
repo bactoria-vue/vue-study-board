@@ -49,7 +49,15 @@
                 })
         },
         computed: {
-            ...mapState(['showModifyBoardModal', 'board']),
+            ...mapState(['board']),
+            showModifyBoardModal: {
+                get() {
+                    return this.$store.state.showModifyBoardModal
+                },
+                set() {
+                    this.CLOSE_MODIFY_BOARD_MODAL()
+                }
+            }
         },
         methods: {
             ...mapActions(['MODIFY_BOARD', 'GET_BOARD']),

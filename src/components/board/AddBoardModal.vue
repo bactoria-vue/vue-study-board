@@ -41,7 +41,14 @@
             }
         },
         computed: {
-            ...mapState(['showAddBoardModal'])
+            showAddBoardModal: {
+                get() {
+                    return this.$store.state.showAddBoardModal
+                },
+                set() {
+                    this.CLOSE_ADD_BOARD_MODAL()
+                }
+            }
         },
         methods: {
             ...mapActions(['ADD_BOARD']),
