@@ -10,6 +10,12 @@ const actions = {
     SIGN_OUT() {
         return auth.logout()
     },
+    GET_USER() {
+        return auth.getUser()
+    },
+    SET_USER(_, user) {
+        return auth.setUser(user)
+    },
     GET_BOARDS({commit}, lastDoc) {
         return board.fetchs(lastDoc)
             .then(docs => {

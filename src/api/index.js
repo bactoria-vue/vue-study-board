@@ -36,6 +36,27 @@ export const auth = {
         })
         return isAuthenticated
     },
+    async getUser() {
+        const currentUser = await firebase.auth().currentUser;
+        const user = {
+            email: currentUser.email,
+            name: currentUser.displayName,
+        }
+        await firebase.firestore().collection('users').doc(currentUser.uid).get()
+            .then(doc => {
+                user.phone = doc.data().phone
+            })
+        return user
+    },
+    async setUser({name, phone}) {
+        const currentUser = await firebase.auth().currentUser
+        currentUser.updateProfile({
+            displayName: name
+        })
+        firebase.firestore().collection('users').doc(currentUser.uid).update({
+            phone
+        })
+    }
 }
 
 const boardLimit = 10;
