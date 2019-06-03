@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="showSignUpModal" max-width="500px">
+    <v-dialog v-model="showSignUpModal" persistent max-width="500px">
         <v-card>
             <v-card-title>
                 회원가입
@@ -47,32 +47,27 @@
 </template>
 
 <script>
-    import {mapActions, mapMutations} from 'vuex'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "SignUpModal",
         data() {
             return {
-                account: {}
-            }
-        },
-        computed: {
-            showSignUpModal: {
-                get() {
-                    return this.$store.state.showSignUpModal
-                },
-                set() {
-                    this.CLOSE_SIGN_UP_MODAL()
+                account: {
+                    email: null,
+                    pwd: null,
+                    username: null,
+                    phone: null
                 }
             }
         },
+        props: ['showSignUpModal'],
         watch: {
             showSignUpModal(val) {
                 this.$log.debug(val)
             }
         },
         methods: {
-            ...mapMutations(['CLOSE_SIGN_UP_MODAL']),
             ...mapActions(['SIGN_UP']),
             submit() {
                 this.$validator.validateAll()
@@ -86,8 +81,7 @@
                     })
             },
             closeModal() {
-                this.clear();
-                this.CLOSE_SIGN_UP_MODAL();
+                this.$emit('close-modal');
             },
             clear() {
                 this.account = {}

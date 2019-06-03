@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="showModifyBoardModal" max-width="500px">
+    <v-dialog v-model="showModifyBoardModal" persistent max-width="500px">
         <v-card>
             <v-card-title>
                 글 수정
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-    import {mapActions, mapMutations, mapState} from 'vuex';
+    import {mapActions, mapMutations, mapGetters} from 'vuex';
 
     export default {
         name: "ModifyBoardModal",
@@ -38,23 +38,11 @@
                 boardInfo: {}
             }
         },
-        created() {
-            const id = this.$route.params.id
-            this.GET_BOARD({id})
-                .then(_ => {
-                    this.boardInfo = JSON.parse(JSON.stringify(this.board));
-                })
-        },
+        props: ['showModifyBoardModal'],
         computed: {
-            ...mapState(['board']),
-            showModifyBoardModal: {
-                get() {
-                    return this.$store.state.showModifyBoardModal
-                },
-                set() {
-                    this.CLOSE_MODIFY_BOARD_MODAL()
-                }
-            }
+            ...mapGetters({
+                board: 'BOARD'
+            })
         },
         watch: {
             showModifyBoardModal(val) {
@@ -63,7 +51,7 @@
         },
         methods: {
             ...mapActions(['MODIFY_BOARD', 'GET_BOARD']),
-            ...mapMutations(['CLOSE_MODIFY_BOARD_MODAL', 'TITLE']),
+            ...mapMutations(['TITLE']),
             submit() {
                 this.$validator.validateAll()
                     .then(validated => {
@@ -78,9 +66,17 @@
                     })
             },
             closeModal() {
-                this.CLOSE_MODIFY_BOARD_MODAL();
+                this.$emit('close-modal');
             }
-        }
+        },
+        created() {
+            const id = this.$route.params.id
+            this.GET_BOARD({id})
+                .then(_ => {
+                    this.boardInfo = JSON.parse(JSON.stringify(this.board));
+                })
+        },
+
     }
 </script>
 

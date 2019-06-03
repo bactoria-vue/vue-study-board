@@ -1,4 +1,5 @@
 <template>
+<div>
     <v-layout row>
         <v-flex xs8 offset-xs2>
             <v-card>
@@ -6,7 +7,7 @@
                     <v-toolbar-title>게시판</v-toolbar-title>
                 </v-toolbar>
                 <v-list>
-                    <v-list-tile v-for="board in boards">
+                    <v-list-tile v-for="board in boards" :key="board.id">
                         <router-link :to="'/board/' + board.id">
                             <board-list-data :board="board"/>
                         </router-link>
@@ -19,28 +20,38 @@
             <v-btn color="primary" @click="addBoardModal">글쓰기</v-btn>
         </v-flex>
     </v-layout>
+    <add-board-modal :show-add-board-modal="showAddBoardModal" @close-modal="closeModal" />
+</div>
 </template>
 
 <script>
-    import {mapActions, mapMutations, mapState} from "vuex";
+    import {mapActions, mapGetters} from 'vuex'
     import InfiniteLoading from 'vue-infinite-loading';
     import BoardListData from "./BoardListData";
+    import AddBoardModal from "./AddBoardModal";
 
     export default {
         name: "BoardList",
-        components: {BoardListData, InfiniteLoading},
-        computed: {
-            ...mapState(['boards', 'lastDoc'])
+        components: {BoardListData, InfiniteLoading, AddBoardModal},
+        data() {
+            return {
+                showAddBoardModal: false
+            }
         },
-        created() {
-            this.GET_BOARDS(this.lastDoc)
+        computed: {
+            ...mapGetters({
+                boards: 'BOARDS',
+                lastDoc: 'LAST_DOC'
+            })
         },
         methods: {
             ...mapActions(['GET_BOARDS']),
-            ...mapMutations(['SHOW_ADD_BOARD_MODAL']),
             addBoardModal() {
-                this.SHOW_ADD_BOARD_MODAL();
+                this.showAddBoardModal = true;
                 this.$log.debug('log from function outside component.');
+            },
+            closeModal() {
+                this.showAddBoardModal = false;
             },
             infiniteHandler($state) {
                 this.$log.debug("fetch boards")
@@ -53,7 +64,8 @@
                         }
                     })
             }
-        }
+        },
+
     }
 </script>
 

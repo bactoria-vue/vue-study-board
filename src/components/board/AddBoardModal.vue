@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="showAddBoardModal" max-width="800px">
+    <v-dialog v-model="showAddBoardModal" persistent max-width="800px">
         <v-card>
             <v-card-title>
                 글쓰기
@@ -30,8 +30,9 @@
 </template>
 
 <script>
-    import {mapActions, mapMutations} from 'vuex';
-
+    import {mapMutations, mapState, mapActions} from 'vuex'
+    import {ADD_BOARD} from '../../store/actions-types'
+    
     export default {
         name: "AddBoardModal",
         data() {
@@ -39,24 +40,14 @@
                 boardInfo: {}
             }
         },
-        computed: {
-            showAddBoardModal: {
-                get() {
-                    return this.$store.state.showAddBoardModal
-                },
-                set() {
-                    this.CLOSE_ADD_BOARD_MODAL()
-                }
-            }
-        },
+        props: ['showAddBoardModal'],
         watch: {
             showAddBoardModal(val) {
                 this.$log.debug(val)
             }
         },
         methods: {
-            ...mapActions(['ADD_BOARD']),
-            ...mapMutations(['CLOSE_ADD_BOARD_MODAL']),
+            ...mapActions([ADD_BOARD]),
             submit() {
                 this.$validator.validateAll()
                     .then(validated => {
@@ -70,7 +61,7 @@
             },
             closeModal() {
                 this.clear();
-                this.CLOSE_ADD_BOARD_MODAL();
+                this.$emit('close-modal');
             },
             clear() {
                 this.boardInfo = {}

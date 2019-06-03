@@ -1,4 +1,5 @@
 <template>
+<div>
     <v-layout row justify-center>
         <v-form style="position: relative; top: 200px;">
             <v-text-field
@@ -22,30 +23,36 @@
             />
 
             <v-btn color="primary" @click="submit">로그인</v-btn>
-            <v-btn color="error" @click="signUp">회원가입</v-btn>
+            <v-btn color="error" @click="openModal">회원가입</v-btn>
         </v-form>
     </v-layout>
+    <sign-up-modal :show-sign-up-modal="showSignUpModal" @close-modal="closeModal" />
+</div>
 </template>
 
 <script>
-    import {mapActions, mapMutations, mapState} from 'vuex'
+    import {mapActions, mapMutations, mapGetters} from 'vuex'
+    import SignUpModal from "./SignUpModal";
+    import {BEFORE_URL} from "../../store/getters-types"
+
     export default {
         name: "LoginForm",
         data() {
             return {
                 email: '',
-                pwd: ''
+                pwd: '',
+                showSignUpModal: false
             }
         },
+        components: {SignUpModal},
         computed: {
-            ...mapState(['beforeUrl'])
+            ...mapGetters({    
+            beforeUrl: BEFORE_URL
+            })
         },
         methods: {
-            ...mapMutations(['SHOW_SIGN_UP_MODAL', 'SET_USER', 'SET_IS_AUTHENTICATED', 'CLEAR_BEFORE_URL']),
+            ...mapMutations(['SET_USER', 'CLEAR_BEFORE_URL']),
             ...mapActions(['SIGN_IN']),
-            signUp() {
-                this.SHOW_SIGN_UP_MODAL()
-            },
             submit() {
                 this.$validator.validateAll()
                     .then(validated => {
@@ -63,6 +70,12 @@
                                 })
                         }
                     })
+            },
+            closeModal() {
+                this.showSignUpModal = false
+            },
+            openModal() {
+                this.showSignUpModal = true
             }
         }
     }

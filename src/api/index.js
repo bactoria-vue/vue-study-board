@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import store from '../store'
 
 firebase.initializeApp({
     apiKey: "AIzaSyDSuhX9SqwloDWezLak1aFSFUhiMk47CFw",
@@ -9,16 +10,24 @@ firebase.initializeApp({
     messagingSenderId: "525568648776"
 })
 
+firebase.auth().onAuthStateChanged(function (user) {
+    if (!!user) {
+        store.commit('SET_AUTHENTICATED', true)
+    }
+})
+
 export const auth = {
     signUp({email, pwd, username, phone}) {
         return firebase.auth().createUserWithEmailAndPassword(email, pwd)
             .then(_ => {
                 const user = firebase.auth().currentUser;
-                return user.updateProfile({
+                user.updateProfile({
                     displayName: username
                 })
+                    .then(_ => {
+                        firebase.firestore().collection('users').doc(user.uid).set({phone})        
+                    })
             })
-            .then(user => firebase.firestore().collection('users').doc(user.uid).set({phone}))
             .catch(error => alert(`회원가입 실패 ${error.message}`))
     },
     login(email, pwd) {
@@ -41,10 +50,13 @@ export const auth = {
         const user = {
             email: currentUser.email,
             name: currentUser.displayName,
+            phone: ''
         }
         await firebase.firestore().collection('users').doc(currentUser.uid).get()
             .then(doc => {
-                user.phone = doc.data().phone
+                if(!!doc.data().phone) {
+                    user.phone = doc.data().phone
+                }
             })
         return user
     },
@@ -92,6 +104,7 @@ export const board = {
     create(board) {
         const user = firebase.auth().currentUser
         board.username = user.displayName
+        board.uid = user.uid
         board.createdDateTime = new Date()
         return firebase.firestore().collection('boards').add(board)
             .catch(error => {
